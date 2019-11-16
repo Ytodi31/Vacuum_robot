@@ -29,9 +29,9 @@
 
 /**
  * @file walkerRobot.cpp
- * @brief
+ * @brief This file contains the definition of member functions of class VacuumRobot
  *
- * This project contains the execution tu navigate a turtlebot much like
+ * This project contains the execution to navigate a turtlebot much like
  * the Roomba vacuum robot while avoiding obstacles
  *
  * @copyright Copyright (c) Fall 2019 ENPM808X
@@ -41,18 +41,63 @@
  *
  * @date 11-13-2019
  */
-#include <string>
-
-#include "ros.h"
+#include "ros/ros.h"
 #include "sensor_msgs/LaserScan.h"
-#include "mobile_base/commands/velocity.h"
+#include "geometry_msgs/Twist.h"
 #include "walkerRobot.h"
 
+void VacuumRobot::laserCallback(const sensor_msgs::LaserScan::ConstPtr& msg) {
+  for (int i =0; i < msg -> ranges.size(); ++i) {
+    // Checking if there is an obstacle in range of 1m of robot
+    if (msg -> ranges[i] <= 1) {
+      // Setting robot state as unsafe to move
+      VacuumRobot::robotState = false;
+      ROS_INFO("Obstacle detected, changing path");
+      return;
+    } else {
+      // Setting robot state as safe to move
+      VacuumRobot::robotState = true;
+    }
+    }
+  }
 
-bool VacuumRobot::path(sensor_msgs::LaserScan::ConstPtr& scanMsg) {
-
-}
 
 void VacuumRobot::velocityController() {
 
+  // Creating a publisher to send velcoity to topic to control robot
+  auto velocity_pub = n.advertise<geometry_msgs::Twist>
+  ("/mobile_base/commands/velocity", 1000);
+
+  // Creating an object of geometry_msgs/twost type to access velocity
+  geometry_msgs::Twist velocity;
+
+  // Initialising linear and angular velocity parameters
+  velocity.linear.y = 0;
+  velocity.linear.z = 0;
+  velocity.angular.x = 0;
+  velocity.angular.y = 0;
+
+  // Defining a subscriber to read the laser scans from topic /scan
+  auto sub = n.subscribe<sensor_msgs::LaserScan>
+             ("/scan", 1000, &VacuumRobot::laserCallback, this);
+
+  ros::Rate loop_rate(10);
+
+  // Checking for successful connection to ROS master
+  while (ros::ok()) {
+  // Checking if it is safe to move, assigns linear velocity to robot
+  if (VacuumRobot::robotState == true) {
+    velocity.linear.x = 0.5;
+    velocity.angular.z = 0;
+  } else {
+    // If it is unsafe to move, assigns angular velocity to look for new heading direction
+    velocity.linear.x = 0;
+    velocity.angular.z = 0.5;
+  }
+
+  // Publishing the velocity to rostopic
+  velocity_pub.publish(velocity);
+  ros::spinOnce();
+  loop_rate.sleep();
+  }
 }

@@ -29,7 +29,7 @@
 
 /**
  * @file walkerRobot.h
- * @brief This file contains the class definition for class VacuumRobot
+ * @brief This file contains the class declaration for class VacuumRobot
  *
  * This project contains the execution to navigate a turtlebot much like
  * the Roomba vacuum robot while avoiding obstacles
@@ -44,7 +44,7 @@
 #ifndef INCLUDE_WALKERROBOT_H_
 #define INCLUDE_WALKERRROBOT_H_
 
-#inlcude "ros/ros.h"
+#include "ros/ros.h"
 #include "sensor_msgs/LaserScan.h"
 /**
  * @brief Vacuum class checks for obstacle and commanfs robot to navigate
@@ -52,11 +52,11 @@
 class VacuumRobot {
 public:
   /**
-   * @brief The function checks if there is a free path for the robot to move
-   * @param Laser scan messages being published on rostopic /scan
-   * @return boolean, 1 if no obstacle found, 0 otherwise
+   * @brief The function checks for obstacles in the robot vicinity
+   * @param pointer to Laser scan messages being published on rostopic /scan
+   * @return none
    */
-  bool path(sensor_msgs::LaserScan::ConstPtr& scanMsg);
+  void laserCallback(const sensor_msgs::LaserScan::ConstPtr& scanMsg);
 
   /**
    * @brief The function provides control to the robot by giving velocity
@@ -65,8 +65,15 @@ public:
    */
   void velocityController();
 
+private:
   /**
-   * @brief boolean value parameter,1 if robot is moving, 0 otherwise
+   * @brief ros parameter of node handle type to create a local node
    */
-  bool robotState;
-}
+    ros::NodeHandle n;
+
+    /**
+     * @brief boolean parameter,true if robot can move safely,false otherwise
+     */
+    bool robotState;
+};
+#endif
