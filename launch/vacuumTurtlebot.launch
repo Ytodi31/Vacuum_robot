@@ -1,0 +1,13 @@
+<launch>
+
+  <include file = "$(find turtlebot_gazebo)/launch/turtlebot_world.launch">
+  </include>
+
+  <node
+    pkg = "the_walker_robot"
+    name = "the_walker_robot"
+    type = "walker"
+    output = "screen"
+  />
+
+</launch>
