@@ -52,7 +52,7 @@ void VacuumRobot::laserCallback(const sensor_msgs::LaserScan::ConstPtr& msg) {
     if (msg -> ranges[i] <= 1) {
       // Setting robot state as unsafe to move
       VacuumRobot::robotState = false;
-      ROS_INFO("Obstacle detected, changing path");
+      ROS_INFO_STREAM("Obstacle detected, finding new path");
       return;
     } else {
       // Setting robot state as safe to move
@@ -89,6 +89,7 @@ void VacuumRobot::velocityController() {
   if (VacuumRobot::robotState == true) {
     velocity.linear.x = 0.5;
     velocity.angular.z = 0;
+    ROS_INFO_STREAM("No obstacle in 1m, moving ahead");
   } else {
     // If it is unsafe to move, assigns angular velocity to look for new heading direction
     velocity.linear.x = 0;
