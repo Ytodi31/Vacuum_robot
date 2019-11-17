@@ -43,10 +43,11 @@ By default, this will have the bag recording on. To disable the bag recording an
 
 - To playback the recorded bag file, ensure that gazebo is not running.
 Run the following
- - Terminal 1 - ROS master \
+  - Terminal 1 - ROS master \
 `source ~/catkin_ws/devel/setup.bash` \
 `roscore`
- - Terminal 2
+
+ - Terminal 2\
  `cd <path to directory>/results`\
  `source ~/catkin_ws/devel/setup.bash` \
  `rosbag play record.bag`
