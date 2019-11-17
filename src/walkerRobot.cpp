@@ -61,9 +61,7 @@ void VacuumRobot::laserCallback(const sensor_msgs::LaserScan::ConstPtr& msg) {
     }
   }
 
-
 void VacuumRobot::velocityController() {
-
   // Creating a publisher to send velcoity to topic to control robot
   auto velocity_pub = n.advertise<geometry_msgs::Twist>
   ("/mobile_base/commands/velocity", 1000);
@@ -91,7 +89,7 @@ void VacuumRobot::velocityController() {
     velocity.angular.z = 0;
     ROS_INFO_STREAM("No obstacle in 1m, moving ahead");
   } else {
-    // If it is unsafe to move, assigns angular velocity to look for new heading direction
+    // If unsafe to move,assigns angular velocity for new heading direction
     velocity.linear.x = 0;
     velocity.angular.z = 0.5;
   }

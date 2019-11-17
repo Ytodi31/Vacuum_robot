@@ -41,8 +41,8 @@
  *
  * @date 11-13-2019
  */
-#ifndef INCLUDE_WALKERROBOT_H_
-#define INCLUDE_WALKERRROBOT_H_
+#ifndef WALKER_ROBOT_SRC_THE_WALKER_ROBOT_INCLUDE_WALKERROBOT_H_
+#define WALKER_ROBOT_SRC_THE_WALKER_ROBOT_INCLUDE_WALKERROBOT_H_
 
 #include "ros/ros.h"
 #include "sensor_msgs/LaserScan.h"
@@ -50,7 +50,9 @@
  * @brief Vacuum class checks for obstacle and commanfs robot to navigate
  */
 class VacuumRobot {
-public:
+ public:
+  VacuumRobot();
+  ~VacuumRobot();
   /**
    * @brief The function checks for obstacles in the robot vicinity
    * @param pointer to Laser scan messages being published on rostopic /scan
@@ -65,7 +67,7 @@ public:
    */
   void velocityController();
 
-private:
+ private:
   /**
    * @brief ros parameter of node handle type to create a local node
    */
@@ -76,4 +78,4 @@ private:
      */
     bool robotState;
 };
-#endif
+#endif  // WALKER_ROBOT_SRC_THE_WALKER_ROBOT_INCLUDE_WALKERROBOT_H_
