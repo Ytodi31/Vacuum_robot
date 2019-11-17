@@ -47,7 +47,7 @@ Run the following
 `source ~/catkin_ws/devel/setup.bash` \
 `roscore`
 
- - Terminal 2\
+  - Terminal 2\
  `cd <path to directory>/results`\
  `source ~/catkin_ws/devel/setup.bash` \
  `rosbag play record.bag`
